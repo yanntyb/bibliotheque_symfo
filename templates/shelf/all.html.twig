@@ -5,13 +5,23 @@
 {% endblock %}
 
 {% block body %}
+<div id="shelf">
     {% for shelf in shelfs %}
-        <h1>shelf: {{ shelf.getId() }}</h1>
-        {% for category in shelf.getCategories %}
-            <h2>{{ category.getTitle() }}</h2>
-        {% endfor %}
+        <div class="row">
+            {% for category in shelf.categories %}
+                <div class="category">
+                    {% for book in category.books %}
+                        <div class="book">
+                            <h4>{{ book.title }}</h4>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
     {% endfor %}
+</div>
 {% endblock %}
+
 
 
 

@@ -1,0 +1,13 @@
+@use "./component/shelf";
+@use "./component/category";
+@use "./component/book";
+
+body{
+    background-color: cornflowerblue;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
