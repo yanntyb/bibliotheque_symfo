@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello BookController!{% endblock %}
+
+{% block body %}
+    <h1>Title : {{ book.title }}</h1>
+    <h2>Category : {{ book.category.title }}</h2>
+    <h3>Shelf : {{ book.category.shelf.id }}</h3>
+{% endblock %}

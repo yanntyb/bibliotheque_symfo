@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block body %}
+
+    {% for cat in categories %}
+        <h1>Title : {{ cat.title }}</h1>
+        <h2>Shelf : {{ cat.shelf.id }}</h2>
+        <h3>Book : </h3>
+        {% for book in cat.books %}
+            <h4>{{ book.title }}</h4>
+        {% endfor %}
+    {% endfor %}
+
+{% endblock %}
+
+

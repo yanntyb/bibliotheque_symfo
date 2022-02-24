@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    All shelf
+{% endblock %}
+
+{% block body %}
+    {% for shelf in shelfs %}
+        <h1>shelf: {{ shelf.getId() }}</h1>
+        {% for category in shelf.getCategories %}
+            <h2>{{ category.getTitle() }}</h2>
+        {% endfor %}
+    {% endfor %}
+{% endblock %}
+
+
+
