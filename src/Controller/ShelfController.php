@@ -3,13 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Shelf;
+use App\Repository\ClientRepository;
 use App\Repository\ShelfRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route("/shelf", "shelf_")]
+#[Route("/", "shelf_")]
 class ShelfController extends AbstractController
 {
     #[Route('/add', name: 'add')]
@@ -25,13 +26,15 @@ class ShelfController extends AbstractController
         ]);
     }
 
-    #[Route("/all", "all")]
-    public function all(ShelfRepository $repository): Response
+    #[Route("/", "all")]
+    public function all(ShelfRepository $repository, ClientRepository $clientRepository): Response
     {
         $shelfs = $repository->findAll();
+        $client = $clientRepository->find(1);
 
         return $this->render("shelf/all.html.twig", [
-            "shelfs" => $shelfs
+            "shelfs" => $shelfs,
+            "user" => $client
         ]);
     }
 }

@@ -38,7 +38,7 @@ class BookRepository extends ServiceEntityRepository
         return $latest[0]->getId();
     }
 
-    public function getAllOrderByCategory()
+    public function getAllOrderByCategory(): array
     {
         $query = $this->createQueryBuilder("b");
         $query

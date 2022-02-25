@@ -5,21 +5,34 @@
 {% endblock %}
 
 {% block body %}
-<div id="shelf">
-    {% for shelf in shelfs %}
-        <div class="row">
-            {% for category in shelf.categories %}
-                <div class="category">
-                    {% for book in category.books %}
-                        <div class="book">
-                            <h4>{{ book.title }}</h4>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endfor %}
-        </div>
+    <div id="user">User connected: {{ user.id }}</div>
+    <div id="user-books">Books taken:</div>
+    {% for book in user.books %}
+        <span>-{{ book.title }} </span>
     {% endfor %}
-</div>
+    <br>
+    <a href="{{ path('book_rendre') }}">Rendre les livres</a>
+    <div id="shelf">
+        {% for shelf in shelfs %}
+            <div class="row">
+                {% for category in shelf.categories %}
+                    <div class="category">
+                        <span class="title">{{ category.title }}</span>
+                        {% for book in category.books %}
+                            {% if book.available %}
+                                <div class="book  available " id="{{ book.id }}">
+                                    <h4>{{ book.title }}</h4>
+                                </div>
+                            {% else %}
+                                <div class="book"></div>
+                            {% endif %}
+
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
 
 

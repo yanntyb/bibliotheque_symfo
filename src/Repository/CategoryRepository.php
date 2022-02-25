@@ -52,9 +52,9 @@ class CategoryRepository extends ServiceEntityRepository
 
     /**
      * Return all category order by shelf id
-     * @return float|int|mixed|string
+     * @return array
      */
-    public function findAllOrderByShelfId(): mixed
+    public function findAllOrderByShelfId(): array
     {
         $query = $this->createQueryBuilder("c");
         $query
