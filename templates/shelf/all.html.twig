@@ -1,17 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    All shelf
+    {{ "My library"|trans([], "message") }}
 {% endblock %}
 
 {% block body %}
-    <div id="user">User connected: {{ user.id }}</div>
-    <div id="user-books">Books taken:</div>
+    <h1>{{ "Welcome to my great library"|trans([], "message") }}</h1>
+    <div id="user">{{ "User connected"|trans([],"message") }} : {{ user.id}} {{ "books taken"|trans([], "message") }}:</div>
+    <div id="user-books">
     {% for book in user.books %}
-        <span>-{{ book.title }} </span>
+        {% if book.id == fade %}
+            <a href="{{ path('book_rendre' , {id: book.id}) }}" class="book  available " id="fade-out" style="background-image: url('{{ book.cover}}')"></a>
+        {% else%}
+            <a href="{{ path('book_rendre', {id: book.id}) }}" class="book  available" style="background-image: url('{{ book.cover}}')"></a>
+        {% endif %}
     {% endfor %}
+    </div>
     <br>
-    <a href="{{ path('book_rendre') }}">Rendre les livres</a>
     <div id="shelf">
         {% for shelf in shelfs %}
             <div class="row">
@@ -20,9 +25,11 @@
                         <span class="title">{{ category.title }}</span>
                         {% for book in category.books %}
                             {% if book.available %}
-                                <div class="book  available " id="{{ book.id }}">
-                                    <h4>{{ book.title }}</h4>
-                                </div>
+                                {% if book.id == fade %}
+                                    <a href="{{ path('book_take' , {id: book.id}) }}" class="book  available " id="fade-in" style="background-image: url('{{ book.cover}}')"></a>
+                                {% else%}
+                                <a href="{{ path('book_take' , {id: book.id}) }}" class="book  available "  style="background-image: url('{{ book.cover}}')"></a>
+                                {% endif%}
                             {% else %}
                                 <div class="book"></div>
                             {% endif %}

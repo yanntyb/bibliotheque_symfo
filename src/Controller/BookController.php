@@ -4,14 +4,18 @@ namespace App\Controller;
 
 use App\Entity\Book;
 use App\Entity\Client;
+use App\Form\BookType;
 use App\Repository\BookRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\ClientRepository;
 use App\Repository\ShelfRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBag;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -50,13 +54,37 @@ class BookController extends AbstractController
 
     }
 
-    #[Route("/take", name: "take")]
-    public function take(ShelfRepository $shelfRepository): JsonResponse
+    #[Route("/add/form", name:"add_form")]
+    public function addForm(Request $request, ParameterBagInterface $container): Response
+    {
+        $book = new Book();
+        $form = $this->createForm(BookType::class, $book);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+
+            $file = $form["cover"]->getData();
+            $ext = $file->guessExtension();
+            if(!$ext){
+                $ext = "bin";
+            }
+
+            $path = $container->get("upload.dir") . "/" .  $book->getTitle() . "." . $ext;
+            $file->move($container->get("upload.dir"), $book->getTitle() . "." . $ext);
+            $book->setCover($path);
+            $this->em->persist($book);
+            $this->em->flush();
+        }
+
+        return $this->render("book/add.html.twig", [
+            "form" => $form->createView(),
+        ]);
+    }
+
+    #[Route("/take/{id}", name: "take")]
+    public function take(ShelfRepository $shelfRepository, Book $book): Response
     {
         $client = $this->clientR->find(1);
-        $data = json_decode(file_get_contents("php://input"));
-        $id = $data->id;
-        $book = $this->bookR->find($id);
         $book
             ->setAvailable(false)
             ->setClient($client);
@@ -65,66 +93,30 @@ class BookController extends AbstractController
 
         $this->em->flush();
 
-        $shelfs = $shelfRepository->findAll();
-        $data = [];
-        foreach($shelfs as $shelf){
-            $categories = [];
-            foreach($shelf->getCategories() as $category){
-                $books = [];
-                foreach($category->getBooks() as $book){
-                    $books[] = [
-                        "title" => $book->getTitle(),
-                        "id" => $book->getId(),
-                        "available" => $book->getAvailable()
-                    ];
-                }
-                $categories[] = [
-                    "title" => $category->getTitle(),
-                    "books" => $books
-                ];
-            }
-            $data[] = [
-                "id" => $shelf->getId(),
-                "categories" => $categories
-            ];
-        }
-
-        $clientBooks = [];
-        foreach($client->getBooks() as $book){
-            $clientBooks[] = [
-                "title" => $book->getTitle(),
-                "id" => $book->getId()
-            ];
-        }
-
-
-        return $this->json(
-            [
-                "shelfs" => $data,
-                "client" => [
-                    "books" => $clientBooks,
-                    "id" => $client->getId()
-                ]
-            ]
-        );
+        return $this->redirectToRoute("shelf_all", [
+            "id" => $book->getId(),
+            "animation" => "fade-out"
+        ]);
     }
 
-    #[Route("/render", name: "rendre")]
+    #[Route("/rendre/{id}", name: "rendre")]
     /**
      * @var Client $client
      */
-    public function rendre(): RedirectResponse
+    public function rendre(Book $book): RedirectResponse
     {
         $client = $this->clientR->find(1);
-        /**
-         * @var Book $book
-         */
-        foreach($client->getBooks() as $book){
-            $book->setAvailable(true);
-            $client->removeBook($book);
-        }
+        $book
+            ->setAvailable(true)
+            ->setClient(null);
+        $client->removeBook($book);
         $this->em->flush();
 
-        return $this->redirectToRoute("shelf_all");
+
+
+        return $this->redirectToRoute("shelf_all", [
+            "id" => $book->getId(),
+            "animation" => "fade-in"
+        ]);
     }
 }

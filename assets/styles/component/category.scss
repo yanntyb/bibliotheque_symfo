@@ -11,14 +11,13 @@
   .title{
     position: relative;
     left: 50%;
-    bottom: -10%;
-    border: 1px solid white;
-    background-color: black;
+    top: 0%;
     color: white;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     text-align: center;
+    z-index: 10;
   }
 }

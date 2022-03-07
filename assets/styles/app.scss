@@ -1,6 +1,7 @@
 @use "./component/shelf";
 @use "./component/category";
 @use "./component/book";
+@use "./component/form";
 
 body{
     background-color: cornflowerblue;
@@ -10,4 +11,8 @@ body{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+#user{
+    padding: 1%;
 }

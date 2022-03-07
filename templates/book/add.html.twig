@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="book-form">
+        {{ form_start(form) }}
+            <div class="form-content">
+                <div class="form-row">
+                    <div class="form-field">
+                        {{ form_label(form.title) }}
+                        {{ form_widget(form.title) }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-field">
+                        {{ form_label(form.category) }}
+                        {{ form_widget(form.category) }}
+                    </div>
+                    <div class="form-field">
+                        {{ form_label(form.cover) }}
+                        {{ form_widget(form.cover) }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-field">
+                        {{ form_label(form.disponibility, "Disponible a partir du:") }}
+                        {{ form_widget(form.disponibility) }}
+                    </div>
+                    <div class="form-field">
+                        {{ form_label(form.maxDisponibility, "Durée maximum d'emprunt:") }}
+                        {{ form_widget(form.maxDisponibility) }}
+                    </div>
+                    <div class="form-field">
+                        {{ form_label(form.available, "Disponible ?") }}
+                        {{ form_widget(form.available) }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-field">
+                        {{ form_label(form.client, "Client actuel:") }}
+                        {{ form_widget(form.client) }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-field">
+                        <input type="submit" value="Ajouter" name="save" class="form-submit">
+                    </div>
+                </div>
+            </div>
+
+        {{ form_widget(form._token) }}
+        {{ form_end(form,  {'render_rest': false}) }}
+    </div>
+{% endblock %}
+
+{% block title %}
+    Add book
+{% endblock %}
+

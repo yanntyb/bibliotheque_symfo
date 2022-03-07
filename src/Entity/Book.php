@@ -26,6 +26,15 @@ class Book
     #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'books')]
     private $client;
 
+    #[ORM\Column(type: 'date')]
+    private $disponibility;
+
+    #[ORM\Column(type: 'dateinterval')]
+    private $maxDisponibility;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private $cover;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +84,42 @@ class Book
     public function setClient(?Client $client): self
     {
         $this->client = $client;
+
+        return $this;
+    }
+
+    public function getDisponibility(): ?\DateTimeInterface
+    {
+        return $this->disponibility;
+    }
+
+    public function setDisponibility(\DateTimeInterface $disponibility): self
+    {
+        $this->disponibility = $disponibility;
+
+        return $this;
+    }
+
+    public function getMaxDisponibility(): ?\DateInterval
+    {
+        return $this->maxDisponibility;
+    }
+
+    public function setMaxDisponibility(\DateInterval $maxDisponibility): self
+    {
+        $this->maxDisponibility = $maxDisponibility;
+
+        return $this;
+    }
+
+    public function getCover(): ?string
+    {
+        return $this->cover;
+    }
+
+    public function setCover(string $cover): self
+    {
+        $this->cover = $cover;
 
         return $this;
     }
